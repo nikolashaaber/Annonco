@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Annonco – Færdige annoncer. Hver måned. Fast pris.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: #080E1A; color: #F0F4FF; }
+    ::selection { background: #2D7DD2; color: #fff; }
+
+    /* NAV */
+    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(8,14,26,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(45,125,210,0.12); }
+    .nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; color: #F0F4FF; }
+    .logo span { color: #2D7DD2; }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { color: rgba(240,244,255,0.65); font-size: 14px; font-weight: 500; text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover { color: #F0F4FF; }
+    .nav-cta { background: #2D7DD2; color: #fff; border: none; padding: 9px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; transition: background 0.2s; text-decoration: none; }
+    .nav-cta:hover { background: #3d8ee3; }
+    .hamburger { display: none; background: none; border: none; color: #F0F4FF; cursor: pointer; font-size: 22px; padding: 4px; }
+    .mobile-menu { display: none; flex-direction: column; background: #0d1525; border-top: 1px solid rgba(240,244,255,0.07); }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { border-bottom: 1px solid rgba(240,244,255,0.07); color: #F0F4FF; font-size: 15px; font-weight: 500; padding: 16px 24px; text-decoration: none; }
+    .mobile-menu a.highlight { color: #2D7DD2; font-weight: 700; }
+
+    /* HERO */
+    .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 120px 24px 80px; position: relative; overflow: hidden; }
+    .hero-glow { position: absolute; top: 20%; left: 50%; transform: translateX(-50%); width: 600px; height: 600px; background: radial-gradient(circle, rgba(45,125,210,0.15) 0%, transparent 70%); pointer-events: none; }
+    .hero-inner { max-width: 780px; position: relative; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(45,125,210,0.12); border: 1px solid rgba(45,125,210,0.3); border-radius: 100px; padding: 6px 14px; font-size: 13px; font-weight: 500; color: #2D7DD2; margin-bottom: 32px; }
+    .hero-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #2D7DD2; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+    .hero h1 { font-size: clamp(40px, 7vw, 76px); font-weight: 900; line-height: 1.05; letter-spacing: -2px; margin-bottom: 24px; }
+    .hero h1 em { font-style: normal; color: #2D7DD2; }
+    .hero p { font-size: clamp(16px, 2.5vw, 20px); color: rgba(240,244,255,0.6); line-height: 1.6; max-width: 560px; margin: 0 auto 40px; }
+    .hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary { background: #2D7DD2; color: #fff; border: none; padding: 14px 28px; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.2s; text-decoration: none; display: inline-block; }
+    .btn-primary:hover { background: #3d8ee3; transform: translateY(-1px); }
+    .btn-ghost { background: transparent; color: rgba(240,244,255,0.7); border: 1px solid rgba(240,244,255,0.15); padding: 14px 28px; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s; text-decoration: none; display: inline-block; }
+    .btn-ghost:hover { border-color: rgba(240,244,255,0.35); color: #F0F4FF; }
+    .hero-stats { display: flex; gap: 48px; justify-content: center; margin-top: 64px; padding-top: 48px; border-top: 1px solid rgba(240,244,255,0.07); flex-wrap: wrap; }
+    .stat-num { font-size: 32px; font-weight: 800; letter-spacing: -1px; }
+    .stat-label { font-size: 13px; color: rgba(240,244,255,0.45); margin-top: 4px; font-weight: 500; }
+
+    /* EXAMPLES */
+    .examples { position: relative; overflow: hidden; padding: 34px 0 96px; margin-top: -42px; }
+    .examples::before, .examples::after { content: ""; position: absolute; top: 0; bottom: 0; width: 16vw; z-index: 2; pointer-events: none; }
+    .examples::before { left: 0; background: linear-gradient(90deg, #080E1A 0%, rgba(8,14,26,0) 100%); }
+    .examples::after { right: 0; background: linear-gradient(270deg, #080E1A 0%, rgba(8,14,26,0) 100%); }
+    .examples-head { max-width: 1100px; margin: 0 auto 34px; padding: 0 24px; display: flex; align-items: end; justify-content: space-between; gap: 24px; }
+    .examples-head .section-sub { max-width: 430px; }
+    .example-orbit { display: flex; width: max-content; gap: 22px; padding: 18px 22px 30px; animation: rotateExamples 34s linear infinite; transform-style: preserve-3d; }
+    .example-orbit:hover { animation-play-state: paused; }
+    .example-card { width: clamp(190px, 19vw, 276px); aspect-ratio: 4 / 5; border-radius: 18px; overflow: hidden; flex: 0 0 auto; background: rgba(240,244,255,0.06); border: 1px solid rgba(240,244,255,0.12); box-shadow: 0 24px 70px rgba(0,0,0,0.42); transform: rotate(var(--tilt)) translateY(var(--lift)); animation: cardFloat 7s ease-in-out infinite; animation-delay: var(--delay); }
+    .example-card.square { aspect-ratio: 1 / 1; align-self: center; }
+    .example-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    @keyframes rotateExamples { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    @keyframes cardFloat { 0%, 100% { translate: 0 0; } 50% { translate: 0 -14px; } }
+
+    /* SECTIONS */
+    .section { max-width: 1100px; margin: 0 auto; padding: 100px 24px; }
+    .section-label { font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #2D7DD2; margin-bottom: 16px; }
+    .section-title { font-size: clamp(28px, 4vw, 42px); font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin-bottom: 16px; }
+    .section-sub { font-size: 17px; color: rgba(240,244,255,0.55); line-height: 1.6; max-width: 520px; }
+    .section-alt { background: rgba(240,244,255,0.02); border-top: 1px solid rgba(240,244,255,0.05); border-bottom: 1px solid rgba(240,244,255,0.05); }
+
+    /* STEPS */
+    .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 56px; background: rgba(240,244,255,0.06); border-radius: 16px; overflow: hidden; }
+    .step { background: #080E1A; padding: 40px 32px; }
+    .step-num { font-size: 11px; font-weight: 700; letter-spacing: 2px; color: #2D7DD2; margin-bottom: 20px; }
+    .step-line { width: 32px; height: 2px; background: #2D7DD2; margin-bottom: 20px; }
+    .step h3 { font-size: 18px; font-weight: 700; letter-spacing: -0.4px; margin-bottom: 12px; }
+    .step p { font-size: 14px; color: rgba(240,244,255,0.5); line-height: 1.65; }
+
+    /* PRICING */
+    .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 56px; }
+    .pkg { background: rgba(240,244,255,0.04); border: 1px solid rgba(240,244,255,0.08); border-radius: 16px; padding: 36px 28px; position: relative; transition: border-color 0.2s; }
+    .pkg:hover { border-color: rgba(45,125,210,0.3); }
+    .pkg.popular { background: rgba(45,125,210,0.08); border-color: rgba(45,125,210,0.4); }
+    .popular-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #2D7DD2; color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 4px 14px; border-radius: 100px; white-space: nowrap; }
+    .pkg-name { font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: rgba(240,244,255,0.5); margin-bottom: 12px; }
+    .pkg-price { font-size: 42px; font-weight: 900; letter-spacing: -2px; margin-bottom: 4px; }
+    .pkg-price span { font-size: 16px; font-weight: 500; color: rgba(240,244,255,0.4); letter-spacing: 0; }
+    .pkg-features { list-style: none; margin: 24px 0 32px; display: flex; flex-direction: column; gap: 12px; }
+    .pkg-features li { font-size: 14px; color: rgba(240,244,255,0.65); display: flex; align-items: center; gap: 10px; }
+    .pkg-features li::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: #2D7DD2; flex-shrink: 0; }
+    .pkg-btn { width: 100%; padding: 13px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.2s; text-decoration: none; display: block; text-align: center; }
+    .pkg-btn-outline { background: transparent; color: #F0F4FF; border: 1px solid rgba(240,244,255,0.2); }
+    .pkg-btn-outline:hover { border-color: rgba(240,244,255,0.4); }
+    .pkg-btn-fill { background: #2D7DD2; color: #fff; border: none; }
+    .pkg-btn-fill:hover { background: #3d8ee3; }
+
+    /* FAQ */
+    .faq-list { margin-top: 48px; display: flex; flex-direction: column; gap: 2px; }
+    .faq-item { background: rgba(240,244,255,0.03); border: 1px solid rgba(240,244,255,0.07); border-radius: 12px; overflow: hidden; margin-bottom: 8px; }
+    .faq-q { width: 100%; background: none; border: none; color: #F0F4FF; font-family: inherit; font-size: 16px; font-weight: 600; padding: 24px 28px; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+    .faq-icon { font-size: 22px; color: #2D7DD2; flex-shrink: 0; transition: transform 0.2s; line-height: 1; }
+    .faq-icon.open { transform: rotate(45deg); }
+    .faq-a { padding: 0 28px 24px; font-size: 15px; color: rgba(240,244,255,0.55); line-height: 1.7; display: none; }
+    .faq-a.open { display: block; }
+
+    /* CTA */
+    .cta-section { background: linear-gradient(135deg, rgba(45,125,210,0.12) 0%, rgba(8,14,26,0) 100%); border-top: 1px solid rgba(45,125,210,0.15); border-bottom: 1px solid rgba(45,125,210,0.15); }
+    .cta-inner { max-width: 700px; margin: 0 auto; padding: 100px 24px; text-align: center; }
+    .cta-inner h2 { font-size: clamp(28px, 4vw, 46px); font-weight: 900; letter-spacing: -1.5px; margin-bottom: 16px; }
+    .cta-inner p { font-size: 17px; color: rgba(240,244,255,0.55); margin-bottom: 36px; line-height: 1.6; }
+
+    /* FOOTER */
+    .footer { max-width: 1100px; margin: 0 auto; padding: 40px 24px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(240,244,255,0.07); flex-wrap: wrap; gap: 16px; }
+    .footer-logo { font-size: 18px; font-weight: 800; }
+    .footer-logo span { color: #2D7DD2; }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { font-size: 13px; color: rgba(240,244,255,0.4); text-decoration: none; }
+    .footer-links a:hover { color: rgba(240,244,255,0.7); }
+    .footer-right { font-size: 13px; color: rgba(240,244,255,0.3); }
+
+    @media (max-width: 768px) {
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: block; }
+      .steps-grid, .pricing-grid { grid-template-columns: 1fr; }
+      .hero-stats { gap: 32px; }
+      .examples { margin-top: -18px; padding-bottom: 72px; }
+      .examples-head { display: block; margin-bottom: 22px; }
+      .example-orbit { gap: 14px; padding-inline: 16px; animation-duration: 28s; }
+      .example-card { width: 176px; border-radius: 14px; }
+      .footer { flex-direction: column; text-align: center; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .example-orbit, .example-card { animation: none; }
+      .example-orbit { overflow-x: auto; width: auto; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="logo">Annon<span>co</span></div>
+    <ul class="nav-links">
+      <li><a href="#sådan-virker-det">Sådan virker det</a></li>
+      <li><a href="#pakker">Pakker</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <a href="#kontakt" class="nav-cta">Kontakt os</a>
+    <button class="hamburger" onclick="toggleMenu()">☰</button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#sådan-virker-det" onclick="closeMenu()">Sådan virker det</a>
+    <a href="#pakker" onclick="closeMenu()">Pakker</a>
+    <a href="#faq" onclick="closeMenu()">FAQ</a>
+    <a href="#kontakt" class="highlight" onclick="closeMenu()">Kontakt os →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      Dansk annoncestudio
+    </div>
+    <h1>Friske annoncer.<br><em>Hver måned.</em><br>Fast pris.</h1>
+    <p>Vi producerer færdige Meta-annoncer til din virksomhed – så du kan fokusere på det du er god til.</p>
+    <div class="hero-btns">
+      <a href="#pakker" class="btn-primary">Se vores pakker</a>
+      <a href="#sådan-virker-det" class="btn-ghost">Sådan virker det →</a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="stat-num">8-30</div><div class="stat-label">Statics pr. måned</div></div>
+      <div><div class="stat-num">3</div><div class="stat-label">Formater til feed, story og reels</div></div>
+      <div><div class="stat-num">&lt;48t</div><div class="stat-label">Første batch klar</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- EXAMPLES -->
+<section class="examples" aria-label="Eksempler på static ads">
+  <div class="examples-head">
+    <div>
+      <div class="section-label">Eksempler</div>
+      <h2 class="section-title">Statics der stopper folk med at scrolle.</h2>
+    </div>
+    <p class="section-sub">Se udpluk af annonceformaterne vi bygger: produktfokus, stærke kontraster og budskaber der kan forstås på få sekunder.</p>
+  </div>
+  <div class="example-orbit">
+    <figure class="example-card" style="--tilt:-5deg; --lift:6px; --delay:-1s;"><img src="assets/examples/keto-paleo-perfekt-match-static-4-5.png" alt="Eksempel på static ad for keto og paleo" loading="lazy" /></figure>
+    <figure class="example-card square" style="--tilt:4deg; --lift:-8px; --delay:-2.3s;"><img src="assets/examples/vitamins.png" alt="Eksempel på static ad for vitaminer" loading="lazy" /></figure>
+    <figure class="example-card" style="--tilt:2deg; --lift:10px; --delay:-3.4s;"><img src="assets/examples/m-rkt-k-kken-premium-livsstil-static-4-5.png" alt="Eksempel på premium livsstil static ad" loading="lazy" /></figure>
+    <figure class="example-card square" style="--tilt:-3deg; --lift:-4px; --delay:-4.1s;"><img src="assets/examples/cana.png" alt="Eksempel på static ad med drikkevare" loading="lazy" /></figure>
+    <figure class="example-card square" style="--tilt:5deg; --lift:8px; --delay:-5.2s;"><img src="assets/examples/maske.png" alt="Eksempel på static ad for hudpleje" loading="lazy" /></figure>
+    <figure class="example-card" style="--tilt:-5deg; --lift:6px; --delay:-1s;" aria-hidden="true"><img src="assets/examples/keto-paleo-perfekt-match-static-4-5.png" alt="" loading="lazy" /></figure>
+    <figure class="example-card square" style="--tilt:4deg; --lift:-8px; --delay:-2.3s;" aria-hidden="true"><img src="assets/examples/vitamins.png" alt="" loading="lazy" /></figure>
+    <figure class="example-card" style="--tilt:2deg; --lift:10px; --delay:-3.4s;" aria-hidden="true"><img src="assets/examples/m-rkt-k-kken-premium-livsstil-static-4-5.png" alt="" loading="lazy" /></figure>
+    <figure class="example-card square" style="--tilt:-3deg; --lift:-4px; --delay:-4.1s;" aria-hidden="true"><img src="assets/examples/cana.png" alt="" loading="lazy" /></figure>
+    <figure class="example-card square" style="--tilt:5deg; --lift:8px; --delay:-5.2s;" aria-hidden="true"><img src="assets/examples/maske.png" alt="" loading="lazy" /></figure>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="sådan-virker-det" class="section-alt">
+  <div class="section">
+    <div class="section-label">Processen</div>
+    <h2 class="section-title">Tre trin. Ingen bøvl.</h2>
+    <p class="section-sub">Vi bygger statics med stærke hooks, tydelige offers og layouts der får folk til at stoppe midt i deres feed.</p>
+    <div class="steps-grid">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-line"></div>
+        <h3>Du fortæller os om din virksomhed</h3>
+        <p>Vi lærer dit brand at kende på 15 minutter – produkter, målgruppe og hvad du vil opnå.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-line"></div>
+        <h3>Vi designer scroll-stoppere</h3>
+        <p>Færdige static ads med hook, offer og visuelt hierarki – klar til Meta, TikTok og retargeting.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-line"></div>
+        <h3>Du tester, lærer og skalerer</h3>
+        <p>Hver levering giver dig nye vinkler at teste, så du ikke kører de samme trætte annoncer igen og igen.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pakker">
+  <div class="section">
+    <div class="section-label">Priser</div>
+    <h2 class="section-title">Vælg din pakke.</h2>
+    <p class="section-sub">Ingen binding. Ingen skjulte gebyrer. Opsig når du vil med 7 dages varsel.</p>
+    <div class="pricing-grid">
+      <div class="pkg">
+        <div class="pkg-name">Starter</div>
+        <div class="pkg-price">1.500<span> kr/md</span></div>
+        <ul class="pkg-features">
+          <li>8 static ads pr. måned</li>
+          <li>Alle formater (1:1, 4:5, 9:16)</li>
+          <li>Fast leveringsdato</li>
+          <li>Én revision</li>
+          <li>Ingen binding</li>
+        </ul>
+        <a href="#kontakt" class="pkg-btn pkg-btn-outline">Kom i gang</a>
+      </div>
+      <div class="pkg popular">
+        <div class="popular-badge">Mest populær</div>
+        <div class="pkg-name">Growth</div>
+        <div class="pkg-price">2.200<span> kr/md</span></div>
+        <ul class="pkg-features">
+          <li>15 static ads pr. måned</li>
+          <li>Alle formater (1:1, 4:5, 9:16)</li>
+          <li>Fast leveringsdato</li>
+          <li>To revisioner</li>
+          <li>Dedikeret strateg</li>
+          <li>Ingen binding</li>
+        </ul>
+        <a href="#kontakt" class="pkg-btn pkg-btn-fill">Kom i gang</a>
+      </div>
+      <div class="pkg">
+        <div class="pkg-name">Pro</div>
+        <div class="pkg-price">3.500<span> kr/md</span></div>
+        <ul class="pkg-features">
+          <li>30 static ads pr. måned</li>
+          <li>Alle formater (1:1, 4:5, 9:16)</li>
+          <li>Prioriteret levering</li>
+          <li>Ubegrænsede revisioner</li>
+          <li>Dedikeret strateg</li>
+          <li>Ingen binding</li>
+        </ul>
+        <a href="#kontakt" class="pkg-btn pkg-btn-outline">Kom i gang</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="section-alt">
+  <div class="section">
+    <div class="section-label">FAQ</div>
+    <h2 class="section-title">Gode spørgsmål.</h2>
+    <p class="section-sub">Alt du vil vide om at arbejde med Annonco.</p>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(0)">
+          Hvad er en static ad?
+          <span class="faq-icon" id="icon-0">+</span>
+        </button>
+        <div class="faq-a" id="faq-0">En static ad er et stillbillede bygget til at stoppe scrollet hurtigt: tydelig headline, stærkt produktfokus og et budskab man forstår på få sekunder.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(1)">
+          Hvor hurtigt leverer I?
+          <span class="faq-icon" id="icon-1">+</span>
+        </button>
+        <div class="faq-a" id="faq-1">Første batch leveres inden for 48 timer. Herefter på en fast dato hver måned – så du altid ved hvornår dine annoncer er klar.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(2)">
+          Kan jeg opsige når som helst?
+          <span class="faq-icon" id="icon-2">+</span>
+        </button>
+        <div class="faq-a" id="faq-2">Ja. Ingen binding overhovedet. Du opsiger med 7 dages varsel – ingen spørgsmål, ingen gebyrer.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(3)">
+          Passer det til min virksomhed?
+          <span class="faq-icon" id="icon-3">+</span>
+        </button>
+        <div class="faq-a" id="faq-3">Hvis du vil have flere kunder via sociale medier uden at bruge tid på det selv – så ja. Vi arbejder med alle brancher og størrelser.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="kontakt" class="cta-section">
+  <div class="cta-inner">
+    <div class="section-label" style="text-align:center">Kom i gang</div>
+    <h2>Klar til annoncer der virker?</h2>
+    <p>Skriv til os på Instagram – vi vender tilbage inden for 24 timer.</p>
+    <a href="https://instagram.com/annonco.dk" target="_blank" class="btn-primary" style="font-size:16px; padding:16px 36px;">
+      Skriv til os på Instagram →
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer">
+    <div class="footer-logo">Annon<span>co</span></div>
+    <div class="footer-links">
+      <a href="#">Privatlivspolitik</a>
+      <a href="#">Kontakt</a>
+    </div>
+    <div class="footer-right">© 2025 Annonco · CVR: XXXXXXXX</div>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() {
+    const menu = document.getElementById('mobileMenu');
+    menu.classList.toggle('open');
+  }
+  function closeMenu() {
+    document.getElementById('mobileMenu').classList.remove('open');
+  }
+  function toggleFaq(i) {
+    const answer = document.getElementById('faq-' + i);
+    const icon = document.getElementById('icon-' + i);
+    const isOpen = answer.classList.contains('open');
+    document.querySelectorAll('.faq-a').forEach(a => a.classList.remove('open'));
+    document.querySelectorAll('.faq-icon').forEach(ic => ic.classList.remove('open'));
+    if (!isOpen) {
+      answer.classList.add('open');
+      icon.classList.add('open');
+    }
+  }
+</script>
+</body>
+</html>
